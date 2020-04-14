@@ -1,0 +1,13 @@
+
+The StreamingDataFrame is considered as an unbound table, which keeps growing on each time step. 
+In Complete mode, the entire updated result table will be written to the external storage.
+
+The results are aggregated by (word) and sorted by (descending num_words).
+
+The files are being transferred over time. 
+
+---------------------------
+ RESULTS		
+--------------------------- 
+
+ERROR: Data source csv does not support Complete output mode.

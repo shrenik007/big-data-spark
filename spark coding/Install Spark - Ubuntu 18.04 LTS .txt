@@ -1,0 +1,316 @@
+
+---------------------------------------
+
+	INSTALL SPARK LOCALLY
+
+---------------------------------------
+
+Set of steps to install Spark 2.4.0 locally.
+
+---------------------------------------
+ I. JAVA ORACLE 8
+---------------------------------------
+
+0. Check that Java Oracle 8 is installed and selected as default in your system. Open a terminal and type:
+
+----------------
+TERMINAL
+----------------
+$ java -version
+----------------
+
+You should get something like this: 
+
+----------------
+TERMINAL
+----------------
+java version "1.8.0_191"
+Java(TM) SE Runtime Environment (build 1.8.0_191-b12)
+Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)
+----------------
+
+If you don't get the aforementioned (nevermind if the number 191 is different) then follow these steps:  
+
+1. Install Java Runtime Environment (JRE) Oracle 8 by opening a terminal and typing: 
+
+----------------
+TERMINAL
+----------------
+$ sudo add-apt-repository ppa:webupd8team/java
+$ sudo apt update
+$ sudo apt install oracle-java8-installer
+----------------
+
+2. Set the JRE and JVM of java-8-oracle (for commands java and javac, respectively) to be the one used by default: 
+
+----------------
+TERMINAL
+----------------
+$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac
+----------------
+
+3. Set the JAVA_HOME environment variable:
+
+Let's call the path associated to the option you selected in step 2 "java_path".
+
+----------------
+TERMINAL
+----------------
+$ sudo gedit ~/.bashrc
+----------------
+
+Add the following line at the end of the file:
+export JAVA_HOME="java_path"
+Close the file
+
+----------------
+TERMINAL
+----------------
+$ source ~/.bashrc
+----------------
+
+4. Check that spark-submit is available: 
+
+----------------
+TERMINAL
+----------------
+$ spark-submit --version
+
+---------------------------------------
+ II. PYSPARK
+---------------------------------------
+ 
+1. Install the pyspark package with pip3: 
+
+----------------
+TERMINAL
+----------------
+$ pip3 install pyspark
+----------------
+
+2. Add the pyspark location to your environment variable PATH: 
+
+----------------
+TERMINAL
+----------------
+$ echo $PATH
+
+Open gedit. 
+Copy the value of PATH that you see in the terminal to a temporary file. 
+Edit it by replacing each appearance of /home/yourName/ with ~/
+Copy the content once replaced (let's call this String "path_value").
+Close gedit. 
+
+$ sudo gedit ~/.bashrc
+
+Add the following line at the end of the file:
+export PATH="path_value"
+Close the file
+
+$ source ~/.bashrc
+----------------
+
+3. Check that spark-submit is available: 
+
+----------------
+TERMINAL
+----------------
+$ spark-submit --version
+
+You should see the following: 
+
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.4.0
+      /_/
+                        
+Using Scala version 2.11.12, Java HotSpot(TM) 64-Bit Server VM, 1.8.0_191
+Branch 
+Compiled by user  on 2018-10-29T06:22:05Z
+Revision 
+Url 
+Type --help for more information.
+----------------
+
+---------------------------------------
+ III. YOUR FIRST SPARK PROGRAM
+---------------------------------------
+
+1. Create a new folder in a directory containing no spaces (e.g., Desktop)
+
+$ cd ~/Desktop/
+$ mkdir MySpark
+$ cd MySpark/
+$ mkdir Workspace
+$ mkdir FileStore
+
+2. Create your first Spark program using Python: my_test.py
+
+# --------------------------------------------------------
+# BEGIN OF FILE
+# --------------------------------------------------------
+
+# --------------------------------------------------------
+#           PYTHON PROGRAM
+# Here is where we are going to define our set of...
+# - Imports
+# - Global Variables
+# - Functions
+# ...to achieve the functionality required.
+# When executing > python 'this_file'.py in a terminal,
+# the Python interpreter will load our program,
+# but it will execute nothing yet.
+# --------------------------------------------------------
+
+import pyspark
+
+# ------------------------------------------
+# FUNCTION my_main
+# ------------------------------------------
+def my_main(sc):
+    # 1. Operation C1: Creation 'parallelize', so as to store the content of the collection [(1, 2), (3, 8), (1, 4), (3, 4), (3, 6)] into an RDD.
+    inputRDD = sc.parallelize([1, 2, 3, 4])
+
+    # 2. Operation T1: Transformation 'map', so as to square each item of modifiedRDD.
+    modifiedRDD = inputRDD.map( lambda x : x * x )
+
+    # 3. Operation A1: Action 'reduce', so as to add all items of modifiedRDD
+    resVAL = modifiedRDD.reduce( lambda x1, x2: x1 + x2 )
+
+    # 4. We print resVAL
+    print("\n\n\n --- BEGIN RESULT ---\n\n\n")
+    print(resVAL)
+    print("\n\n\n --- END RESULT ---\n\n\n")
+
+# ---------------------------------------------------------------
+#           PYTHON EXECUTION
+# This is the main entry point to the execution of our program.
+# It provides a call to the 'main function' defined in our
+# Python program, making the Python interpreter to trigger
+# its execution.
+# ---------------------------------------------------------------
+if __name__ == '__main__':
+    # 0. We configure the Spark Context
+    sc = pyspark.SparkContext.getOrCreate()
+    sc.setLogLevel('WARN')
+
+    # 1. We call to my_main
+    my_main(sc)
+
+
+# --------------------------------------------------------
+# END OF FILE
+# --------------------------------------------------------
+
+3. Run your program from a regular terminal: 
+
+----------------
+TERMINAL
+----------------
+$ spark-submit my_test.py
+----------------
+
+4. Run your program from PyCharm as we do with any other Python program: 
+
+For running it from PyCharm you also need to configure the PYSPARK_PYTHON environment variable to take the python3.6 value
+This can be done by adding a last line to the ~/.bashrc file: 
+----------------
+TERMINAL
+----------------
+$ sudo gedit ~/.bashrc
+----------------
+
+Add the following line at the end of the file:
+export PYSPARK_PYTHON=python3.6
+Close the file
+
+----------------
+TERMINAL
+----------------
+$ source ~/.bashrc
+----------------
+
+The problem of this approach is that ~/.bashrc content is only accesed when you open a terminal. 
+Thus, for PyCharm to get access to the PYSPARK_PYTHON environment variable you will need to open the proper PyCharm from a terminal: 
+
+----------------
+TERMINAL
+----------------
+$ pycharm-community my_test.py
+----------------
+
+Alternatively, this can be fixed by adding the content to the ~/.profile file:
+----------------
+TERMINAL
+----------------
+$ sudo gedit ~/.profile
+----------------
+
+Add the following line at the end of the file:
+export PYSPARK_PYTHON=python3.6
+Close the file
+
+----------------
+TERMINAL
+----------------
+$ source ~/.profile
+----------------
+
+Reboot the computer. From now on you can open PyCharm in any way you want and run the Python Spark programs.
+
+----------------------------------------------
+
+	INSTALL GraphFrames LOCALLY
+
+----------------------------------------------
+
+Info obtained from: https://stackoverflow.com/questions/54157268/error-while-creating-graphframe-in-pyspark
+
+1. Download graphframes jar from the link below: 
+https://spark-packages.org/package/graphframes/graphframes
+
+In this case we want to use the release
+Version: 0.7.0-spark2.4-s_2.11 ( f9e13a | zip | jar ) / Date: 2019-01-08 / License: Apache-2.0 / Scala version: 2.11
+
+2. Add the graphframes jar to our local Spark jar repository: 
+
+i. Open a terminal
+ii. Copy the graphframes jar to the Spark jar repository (in my case ~/.local/lib/python3.6/site-packages/pyspark/jars/)
+    cd ~/.local/lib/python3.6/site-packages/pyspark/jars
+    cp -i /home/nacho/Downloads/graphframes-0.7.0-spark2.4-s_2.11.jar ./
+
+3. Our Python program has to launch the graphframes jar file aforementioned. 
+   This results in an updated way of creating the Spark session object: 
+
+   spark = pyspark.sql.SparkSession \
+                      .builder \
+                      .appName("myApp") \
+                      .config('spark.jars.packages', 'graphframes:graphframes:0.7.0-spark2.4-s_2.11') \
+                      .getOrCreate()
+
+   This way you can just launch the Spark program from Python with no problems, either from console or from PyCharm.
+
+----------------------------------------------
+
+	INSTALL GraphFrames IN DATABRICKS
+
+----------------------------------------------
+
+1. Go to Databricks Main Page -> Common Tasks -> Import Library
+2. Library Source = Maven -> Coordinates - Search Packages
+3. Name = graphframes; Organization = graphframes; Description = GraphFrames: DataFrame-based Graphs; Releases = 0.7.0-spark2.4-s_2.11
+   Options = Select
+4. Back to the Import Library UI -> Create 
+   It is also possible to add it directly to all clusters by ticking a box.
+
+
+
+
+
+
+
+
+

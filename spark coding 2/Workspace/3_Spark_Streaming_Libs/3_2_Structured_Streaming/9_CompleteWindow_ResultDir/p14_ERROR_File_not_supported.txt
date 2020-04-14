@@ -1,0 +1,19 @@
+
+The StreamingDataFrame is considered as an unbound table, which keeps growing on each time step. 
+In Complete mode, the entire updated result table will be written to the external storage.
+
+In this example the new rows arriving on each time step are enriched with the current timestamp. 
+We create windows of slide_dur = 1 and window_dur = 2
+
+The results are aggregated by (word, timestamp-based window) and sorted by (ascending time-window, descending num_words).
+
+As we can see, both Spark Streaming and Structured Streaming show the results for the "closed" (fully completed) windows. 
+However, Structured Streaming also shows preliminary results for "already opened but still not closed" (partially completed) windows. 
+
+The files are being transferred over time. 
+
+---------------------------
+ RESULTS		
+--------------------------- 
+
+ERROR: Data source csv does not support Complete output mode.

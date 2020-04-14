@@ -1,0 +1,32 @@
+
+The results are presented in a terrible format. 
+
+The Python program "structured_streaming_post_process_my_result.py" has to be run so as to make the results legible for us human beings :)
+
+As with the printing by Console case, the library does not process the last time interval. 
+
+---------------------------
+ RESULTS		
+--------------------------- 
+
+------------
+ Step 0 
+------------
+Brazil;1;2019-11-29 13:35:45;2019-11-29 13:36:00
+Argentina;1;2019-11-29 13:35:45;2019-11-29 13:36:00
+Colombia;1;2019-11-29 13:35:45;2019-11-29 13:36:00
+
+------------
+ Step 1 
+------------
+Brazil;1;2019-11-29 13:36:15;2019-11-29 13:36:30
+Argentina;1;2019-11-29 13:36:15;2019-11-29 13:36:30
+
+------------
+ Step 2 
+------------
+
+
+
+
+
